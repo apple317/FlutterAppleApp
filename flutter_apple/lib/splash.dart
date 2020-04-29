@@ -1,10 +1,16 @@
+import 'dart:async';
+import 'dart:convert';
+import 'package:app/generated/json/base/json_convert_content.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui'; //获取屏幕尺寸需要导入的包
 import 'dart:io';
 import 'package:flutter/services.dart';
+import 'common/http/WanAndroidApi.dart';
+import 'common/model/splash_entity_entity.dart';
 
 void main() {
-  // runApp(MyApp());
+  runApp(MyApp());
 //  if (Platform.isAndroid) {
 //// 以下两行 设置android状态栏为透明的沉浸。写在组件渲染之后，是为了在渲染后进行set赋值，覆盖状态栏，写在渲染之前MaterialApp组件会覆盖掉这个值。
 //    SystemUiOverlayStyle systemUiOverlayStyle =
@@ -15,34 +21,18 @@ void main() {
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        theme: ThemeData(
-      // This is the theme of your application.
-      //
-      // Try running your application with "flutter run". You'll see the
-      // application has a blue toolbar. Then, without quitting the app, try
-      // changing the primarySwatch below to Colors.green and then invoke
-      // "hot reload" (press "r" in the console where you ran "flutter run",
-      // or simply save your changes to "hot reload" in a Flutter IDE).
-      // Notice that the counter didn't reset back to zero; the application
-      // is not restarted.
-      primarySwatch: Colors.transparent,
-    )
-        // home: MyHomePage(title: 'Flutter Demo Home Page'),
-        );
-//    return AnnotatedRegion<SystemUiOverlayStyle>(
-//      value: SystemUiOverlayStyle.light,
-//      child: MaterialApp(theme: ThemeData(primarySwatch: Colors.transparent)
-//          //   home: new MyHomePage(),
-//          ),
-//    );
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle.dark,
+      child: MaterialApp(home: new MyHomePage()),
+    );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+  MyHomePage({Key key}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -53,23 +43,71 @@ class MyHomePage extends StatefulWidget {
   // used by the build method of the State. Fields in a Widget subclass are
   // always marked "final".
 
-  final String title;
-
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   int _counter = 0;
+  bool isClicking1 = false;
+  double statebar_height;
 
-  void _incrementCounter() {
+  //屏幕的宽高
+  double height;
+  double width;
+  int pageViewIndex = 0;
+
+  int pageTotalSize = 0;
+  int countTime = 4;
+
+  AppLifecycleState appLifecycleState;
+
+  void upDataButtonState(bool clicked) {
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+      isClicking1 = clicked;
+    });
+  }
+
+  var splashBuilder;
+
+  Future<SplashEntityEntity> fetchPost() async {
+    var dio = Dio();
+    Response response;
+    response = await dio
+        .get(WanAndroidApi.OtherCategory, queryParameters: {"type": 1});
+//    print(JsonConvert.fromJsonAsT<SplashEntityEntity>(response.data)
+//        .result
+//        .elementAt(0)
+//        .album10001000);
+    return JsonConvert.fromJsonAsT<SplashEntityEntity>(response.data);
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    splashBuilder = fetchPost();
+    initCountDown();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  String nextStr = "4s跳过";
+
+  initCountDown() {
+    // 只在倒计时结束时回调
+    Timer.periodic(new Duration(seconds: 1), (timer) {
+      if (timer.tick == 5) {
+        setState(() {
+          nextStr = '跳过';
+        });
+        timer.cancel();
+        print(nextStr);
+      } else {
+        setState(() {
+          nextStr = '${countTime--}s跳过';
+        });
+        print(nextStr);
+      }
     });
   }
 
@@ -77,51 +115,149 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
-    //
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
+    statebar_height = MediaQuery.of(context).padding.top;
+    height = MediaQuery.of(context).size.height;
+    width = MediaQuery.of(context).size.width;
+
     return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.display1,
-            ),
-          ],
+        body: new Stack(
+      children: <Widget>[
+        new Positioned(
+          child: FutureBuilder<SplashEntityEntity>(
+            future: splashBuilder,
+            builder: (BuildContext content, AsyncSnapshot async) {
+              if (async.connectionState == ConnectionState.done) {
+                print("success");
+                return getPageView(async.data);
+              } else {
+                print("loading===");
+                return Container(
+                  height: 100,
+                  width: 100,
+                  alignment: Alignment.center,
+                  child: CircularProgressIndicator(
+                    backgroundColor: Colors.blue,
+                    valueColor: AlwaysStoppedAnimation(Colors.blue),
+                  ),
+                );
+                return CircularProgressIndicator(strokeWidth: 1);
+              }
+            },
+          ),
+          left: 0,
+          right: 0,
+          top: 0,
+          bottom: 0,
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
+        new Positioned(
+            child: new GestureDetector(
+              child: new Container(
+                padding: const EdgeInsets.only(
+                    left: 10, top: 2, right: 10, bottom: 2),
+                decoration: new ShapeDecoration(
+                    color: !isClicking1 ? Colors.white : Color(0xff898989),
+                    shape: StadiumBorder(
+                        side: BorderSide(
+                            color: Color(0xff898989),
+                            style: BorderStyle.solid,
+                            width: 1))),
+                child: Text(nextStr),
+              ),
+              onTap: () {
+                print('onTap 跳过');
+              },
+              onTapUp: (TapUpDetails) {
+                print('onTapUp 跳过');
+                upDataButtonState(false);
+              },
+              onTapDown: (TapUpDetails) {
+                print('onTapDown 跳过');
+                upDataButtonState(true);
+              },
+              onTapCancel: () {
+                print('onTapCancel 跳过');
+                upDataButtonState(false);
+              },
+            ),
+            top: 10 + statebar_height,
+            right: 10),
+        new Positioned(
+          child: Container(
+              child: Align(
+            child: Stack(
+              alignment: Alignment.center,
+              children: <Widget>[
+                Image.asset('images/splash_confirm.png'),
+                Text(
+                  "立即开启",
+                  style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.white,
+                      fontFamily: 'Raleway',
+                      //2.不继承默认样式
+                      decorationStyle: TextDecorationStyle.dashed),
+                )
+              ],
+            ),
+            alignment: Alignment.center,
+          )),
+          height: pageTotalSize > 0 && (pageViewIndex == pageTotalSize - 1)
+              ? 50
+              : 0,
+          width: width,
+          bottom: 50,
+        ),
+      ],
+    ));
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // TODO: implement didChangeAppLifecycleState
+    setState(() {
+      appLifecycleState = state;
+    });
+  }
+
+  PageView getPageView(SplashEntityEntity splashEntityEntity) {
+    PageView pageView;
+    PageController pageController;
+    pageTotalSize = splashEntityEntity.result.length;
+    pageController = new PageController();
+    print("ddd=" + splashEntityEntity.result.length.toString());
+    pageView = new PageView.builder(
+        itemBuilder: (context, index) {
+          return new ConstrainedBox(
+              child: new Image(
+                  image: new NetworkImage(
+                      splashEntityEntity.result.elementAt(index).album10001000),
+                  fit: BoxFit.fill),
+              constraints: new BoxConstraints.expand());
+        },
+        itemCount: splashEntityEntity.result.length,
+        scrollDirection: Axis.horizontal,
+        reverse: false,
+        controller: pageController,
+        onPageChanged: (index) {
+          setState(() {
+            pageViewIndex = index;
+          });
+          print('点击滚动到的位置' +
+              pageViewIndex.toString() +
+              "===" +
+              pageTotalSize.toString());
+        },
+        physics: PageScrollPhysics(parent: BouncingScrollPhysics()));
+    return pageView;
   }
 }

@@ -1,24 +1,16 @@
 package com.flutter.apple.app
 
 import android.annotation.SuppressLint
-import android.app.ActionBar
-import android.os.Build
 import android.os.Bundle
+import android.view.View
 import io.flutter.app.FlutterActivity
 import io.flutter.plugins.GeneratedPluginRegistrant
 import io.flutter.plugins.systemstatus.StatusBarUtil
-@SuppressLint("NewApi")
 class MainActivity : FlutterActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         GeneratedPluginRegistrant.registerWith(this)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            // api大于21设置状态栏透明
-            getWindow().setStatusBarColor(0);
-        }
-            // getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);//窗口透明的状态栏
-     //   StatusBarUtil.statusBarHide(this)
-     //   getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);//窗口透明的导航栏
+       // StatusBarUtil.statusBarHide(this)
     }
 
 

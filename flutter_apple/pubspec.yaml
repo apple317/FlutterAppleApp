@@ -23,11 +23,17 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
+  dio: ^3.0.9
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
+  #本地存储
+  shared_preferences: ^0.5.3+4
+  #获取版本号信息
+  package_info: ^0.4.0+6
+  dio: ^3.0.9
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -70,3 +76,12 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+  assets:
+    - images/main_tabbar_hot_down.png
+    - images/main_tabbar_hot_up.png
+    - images/main_tabbar_match_down.png
+    - images/main_tabbar_match_up.png
+    - images/main_tabbar_my_down.png
+    - images/main_tabbar_my_up.png
+    - images/splash_confirm.png
