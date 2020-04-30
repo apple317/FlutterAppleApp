@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:app/appMain.dart';
 import 'package:app/generated/json/base/json_convert_content.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -65,6 +66,15 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   void upDataButtonState(bool clicked) {
     setState(() {
       isClicking1 = clicked;
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (context) {
+            return appMain();
+          },
+        ),
+        (Route<dynamic> route) => false,
+      );
     });
   }
 
@@ -153,63 +163,71 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
           bottom: 0,
         ),
         new Positioned(
-            child: new GestureDetector(
-              child: new Container(
-                padding: const EdgeInsets.only(
-                    left: 10, top: 2, right: 10, bottom: 2),
-                decoration: new ShapeDecoration(
-                    color: !isClicking1 ? Colors.white : Color(0xff898989),
-                    shape: StadiumBorder(
-                        side: BorderSide(
-                            color: Color(0xff898989),
-                            style: BorderStyle.solid,
-                            width: 1))),
-                child: Text(nextStr),
-              ),
-              onTap: () {
-                print('onTap 跳过');
-              },
-              onTapUp: (TapUpDetails) {
-                print('onTapUp 跳过');
-                upDataButtonState(false);
-              },
-              onTapDown: (TapUpDetails) {
-                print('onTapDown 跳过');
-                upDataButtonState(true);
-              },
-              onTapCancel: () {
-                print('onTapCancel 跳过');
-                upDataButtonState(false);
-              },
-            ),
+            child: Listener(
+                child: new Container(
+                  padding: const EdgeInsets.only(
+                      left: 10, top: 2, right: 10, bottom: 2),
+                  decoration: new ShapeDecoration(
+                      color: !isClicking1 ? Colors.white : Color(0xff898989),
+                      shape: StadiumBorder(
+                          side: BorderSide(
+                              color: Color(0xff898989),
+                              style: BorderStyle.solid,
+                              width: 1))),
+                  child: Text(nextStr),
+                ),
+                onPointerDown: (event) {
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return appMain();
+                      },
+                    ),
+                    (Route<dynamic> route) => false,
+                  );
+                }),
             top: 10 + statebar_height,
             right: 10),
         new Positioned(
-          child: Container(
-              child: Align(
-            child: Stack(
-              alignment: Alignment.center,
-              children: <Widget>[
-                Image.asset('images/splash_confirm.png'),
-                Text(
-                  "立即开启",
-                  style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.white,
-                      fontFamily: 'Raleway',
-                      //2.不继承默认样式
-                      decorationStyle: TextDecorationStyle.dashed),
-                )
-              ],
+            child: Listener(
+              child: Container(
+                child: Align(
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: <Widget>[
+                      Image.asset('images/splash_confirm.png'),
+                      Text(
+                        "立即开启",
+                        style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.white,
+                            fontFamily: 'Raleway',
+                            //2.不继承默认样式
+                            decorationStyle: TextDecorationStyle.dashed),
+                      )
+                    ],
+                  ),
+                  alignment: Alignment.bottomCenter,
+                ),
+                margin: EdgeInsets.only(bottom: 100),
+              ),
+              onPointerDown: (event) {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return appMain();
+                    },
+                  ),
+                  (Route<dynamic> route) => false,
+                );
+              },
             ),
-            alignment: Alignment.center,
-          )),
-          height: pageTotalSize > 0 && (pageViewIndex == pageTotalSize - 1)
-              ? 50
-              : 0,
-          width: width,
-          bottom: 50,
-        ),
+            height: pageTotalSize > 0 && (pageViewIndex == pageTotalSize - 1)
+                ? height
+                : 0,
+            width: width)
       ],
     ));
   }

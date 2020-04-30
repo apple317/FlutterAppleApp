@@ -71,6 +71,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "3.0.9"
+  event_bus:
+    dependency: "direct main"
+    description:
+      name: event_bus
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.1.1"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -144,13 +151,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.0.5"
-  rongcloud_im_plugin:
-    dependency: "direct main"
-    description:
-      name: rongcloud_im_plugin
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "1.1.1"
   shared_preferences:
     dependency: "direct dev"
     description:
