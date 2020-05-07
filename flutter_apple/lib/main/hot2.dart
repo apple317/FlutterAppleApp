@@ -1,5 +1,6 @@
+import 'package:app/main/sample_list_item.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_swiper/flutter_swiper.dart';
 
 class hot2 extends StatelessWidget {
   // This widget is the root of your application.
@@ -23,7 +24,6 @@ class MyHomePage extends StatefulWidget {
   // used by the build method of the State. Fields in a Widget subclass are
   // always marked "final".
 
-
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
@@ -42,6 +42,94 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  final List<Color> colorList = [
+    Colors.red,
+    Colors.orange,
+    Colors.green,
+    Colors.purple,
+    Colors.blue,
+    Colors.yellow,
+    Colors.pink,
+    Colors.teal,
+    Colors.deepPurpleAccent
+  ];
+
+// Text组件需要用SliverToBoxAdapter包裹，才能作为CustomScrollView的子组件
+  Widget renderTitle(String title) {
+    return SliverToBoxAdapter(
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 16),
+        child: Text(
+          title,
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 20),
+        ),
+      ),
+    );
+  }
+
+  /**
+   * 头部视频控件
+   */
+  Widget getHotVideo() {
+    return SliverToBoxAdapter(
+      child: Container(
+        color: Colors.black,
+        margin: EdgeInsets.only(left: 10, top: 4, right: 10),
+        height: 232,
+        child: Text('是淡粉色的'),
+      ),
+    );
+  }
+
+  /**
+   * 视频推荐wiget
+   */
+  Widget getHotRecommend() {
+    return SliverToBoxAdapter(
+      child: Container(
+          height: 80,
+          child: Swiper(
+              itemBuilder: (BuildContext context, int index) {
+                return SampleListItem(direction: Axis.horizontal);
+              },
+              itemCount: 5,
+              viewportFraction: 0.8,
+              scale: 0.9,
+              autoplay: false)),
+    );
+  }
+
+  /**
+   * 推荐广告banner功能
+   */
+  Widget getHotBanner() {
+    return SliverToBoxAdapter(
+      child: Container(
+          height: 100,
+          child: Swiper(
+              itemBuilder: (BuildContext context, int index) {
+                return SampleListItem(direction: Axis.horizontal);
+              },
+              itemCount: 5,
+              viewportFraction: 0.8,
+              scale: 0.9,
+              autoplay: false)),
+    );
+  }
+
+  /**
+   * 今日焦点
+   *
+   */
+  Widget getHotFocus() {
+    return SliverFixedExtentList(
+        delegate: SliverChildBuilderDelegate((context, index) {
+          return SampleListItem();
+        }, childCount: 5),
+        itemExtent: 100);
+  }
+
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -52,7 +140,14 @@ class _MyHomePageState extends State<MyHomePage> {
     // than having to individually change instances of widgets.
     return Scaffold(
       body: Center(
-        child: new Text("首页1-2"),
+        child: CustomScrollView(
+          slivers: <Widget>[
+            getHotVideo(),
+            getHotRecommend(),
+            getHotBanner(),
+            getHotFocus()
+          ],
+        ),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }

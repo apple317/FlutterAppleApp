@@ -83,49 +83,50 @@ class _MyHomePageState extends State<MyHomePage>
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.dark,
-      child:
-      DefaultTabController(
-          length: 2,
-          child: Scaffold(
-            appBar: AppBar(
-              backgroundColor: Colors.white,
-              brightness: Brightness.light,
-              title: Container(
-                  height: 45,
-                  alignment: Alignment.topCenter,
-                  child: TabBar(
-                    tabs: [
-                      Tab(text: '推荐'),
-                      Tab(text: '视频'),
-                    ],
-                    controller: tabController,
-                    indicatorWeight: 2,
-                    indicatorPadding: EdgeInsets.only(left: 10, right: 10),
-                    labelPadding: EdgeInsets.symmetric(horizontal: 10),
-                    isScrollable: true,
-                    indicatorColor: Color(0xffF44335),
-                    labelColor: Color(0xff000000),
-                    labelStyle: TextStyle(
-                      fontSize: 19,
-                      color: Color(0xff000000),
-                      fontWeight: FontWeight.w500,
-                    ),
-                    unselectedLabelColor: Color(0xffAAAAAA),
-                    unselectedLabelStyle:
-                        TextStyle(fontSize: 17, color: Color(0xff999999)),
-                    indicatorSize: TabBarIndicatorSize.label,
-                  )),
-              elevation: 0,
-            ),
-            body: TabBarView(
-              children: [
-                new hot1(),
-                new hot2(),
-              ],
-              controller: tabController,
-            ),
+      child: DefaultTabController(
+        length: 2,
+        child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.white,
+            brightness: Brightness.light,
+            title: Container(
+                height: 45,
+                alignment: Alignment.topCenter,
+                child: TabBar(
+                  tabs: [
+                    Tab(text: '推荐'),
+                    Tab(text: '视频'),
+                  ],
+                  controller: tabController,
+                  indicatorWeight: 2,
+                  indicatorPadding: EdgeInsets.only(left: 10, right: 10),
+                  labelPadding: EdgeInsets.symmetric(horizontal: 10),
+                  isScrollable: true,
+                  //Color(0xffF44335)
+                  indicatorColor: Color(0xffF44335),
+                  labelColor: Color(0xff000000),
+                  //  labelColor: Colors.red,
+                  labelStyle: TextStyle(
+                    fontSize: 19,
+                    color: Color(0xff000000),
+                    fontWeight: FontWeight.w500,
+                  ),
+                  unselectedLabelColor: Color(0xffAAAAAA),
+                  unselectedLabelStyle:
+                      TextStyle(fontSize: 17, color: Color(0xff999999)),
+                  indicatorSize: TabBarIndicatorSize.label,
+                )),
+            elevation: 0,
+          ),
+          body: TabBarView(
+            children: [
+              new hot1(),
+              new hot2(),
+            ],
+            controller: tabController,
           ),
         ),
+      ),
     );
   }
 

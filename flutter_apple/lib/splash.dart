@@ -131,7 +131,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     statebar_height = MediaQuery.of(context).padding.top;
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
-
+    print("屏幕原始===" + MediaQuery.of(context).devicePixelRatio.toString());
     return Scaffold(
         body: new Stack(
       children: <Widget>[

@@ -25,8 +25,8 @@ dependencies:
   cupertino_icons: ^0.1.2
   dio: ^3.0.9
   event_bus: ^1.0.1
-
-
+  flutter_swiper: ^1.1.6
+  pull_to_refresh: ^1.5.8
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -37,6 +37,8 @@ dev_dependencies:
   package_info: ^0.4.0+6
   dio: ^3.0.9
   event_bus: ^1.0.1
+  flutter_swiper: ^1.1.6
+  pull_to_refresh: ^1.5.8
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -88,3 +90,5 @@ flutter:
     - images/main_tabbar_my_down.png
     - images/main_tabbar_my_up.png
     - images/splash_confirm.png
+    - images/hot_recommend.png
+
